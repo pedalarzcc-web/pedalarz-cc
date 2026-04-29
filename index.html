@@ -79,6 +79,10 @@
             cursor: pointer;
             text-decoration: none;
         }
+
+        #sentinel {
+            height: 1px;
+        }
     </style>
 </head>
 <body>
@@ -99,7 +103,7 @@
 
 <div id="gallery"></div>
 
-<div style="height: 800px;"></div>
+<div id="sentinel"></div>
 
 <div id="loading">Ładowanie...</div>
 
@@ -161,10 +165,10 @@ const observer = new IntersectionObserver(entries => {
         loadNextBatch();
     }
 }, {
-    rootMargin: "0px"
+    rootMargin: "200px"
 });
 
-observer.observe(document.getElementById('loading'));
+observer.observe(document.getElementById('sentinel'));
 
 loadImagesList();
 </script>
