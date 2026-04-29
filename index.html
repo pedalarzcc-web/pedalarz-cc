@@ -101,9 +101,9 @@
 
 <h2 style="text-align:center;">Galeria</h2>
 
-<div id="gallery"></div>
-
-<div id="sentinel"></div>
+<div id="gallery">
+    <div id="sentinel"></div>
+</div>
 
 <div id="loading">Ładowanie...</div>
 
@@ -143,13 +143,14 @@ async function loadImagesList() {
 
 function loadNextBatch() {
     const gallery = document.getElementById('gallery');
+    const sentinel = document.getElementById('sentinel');
 
     const nextImages = images.slice(index, index + batchSize);
     nextImages.forEach(file => {
         const img = document.createElement('img');
         img.loading = "lazy";
         img.src = 'images/' + file;
-        gallery.appendChild(img);
+        gallery.insertBefore(img, sentinel);
     });
 
     index += batchSize;
