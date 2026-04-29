@@ -131,6 +131,8 @@ document.getElementById("continueBtn").addEventListener("click", () => {
 let images = [];
 let index = 0;
 const batchSize = 10;
+let loading = false;
+let observer = null;
 
 async function loadImagesList() {
     const response = await fetch('images/images.json');
@@ -139,9 +141,16 @@ async function loadImagesList() {
     images.sort((a, b) => parseInt(a) - parseInt(b));
 
     loadNextBatch();
+
+    initObserver();
 }
 
 function loadNextBatch() {
+    if (loading) return;
+    if (index >= images.length) return;
+
+    loading = true;
+
     const gallery = document.getElementById('gallery');
     const sentinel = document.getElementById('sentinel');
 
@@ -154,22 +163,26 @@ function loadNextBatch() {
     });
 
     index += batchSize;
+    loading = false;
 
     if (index >= images.length) {
         document.getElementById('loading').innerText = "Koniec";
-        observer.disconnect();
+        if (observer) observer.disconnect();
     }
 }
 
-const observer = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) {
-        loadNextBatch();
-    }
-}, {
-    rootMargin: "200px"
-});
+function initObserver() {
+    const sentinel = document.getElementById('sentinel');
+    observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+            loadNextBatch();
+        }
+    }, {
+        rootMargin: "200px"
+    });
 
-observer.observe(document.getElementById('sentinel'));
+    observer.observe(sentinel);
+}
 
 loadImagesList();
 </script>
