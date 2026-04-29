@@ -57,7 +57,9 @@
 </div>
 
 <h2>Galeria</h2>
-<div id="gallery"></div>
+
+<div id="gallery" style="min-height: 100vh;"></div>
+
 <div id="loading">Ładowanie...</div>
 
 <script>
@@ -72,6 +74,13 @@ const batchSize = 10;
 async function loadImagesList() {
     const response = await fetch('images/images.json');
     images = await response.json();
+
+    images.sort((a, b) => {
+        const na = parseInt(a);
+        const nb = parseInt(b);
+        return na - nb;
+    });
+
     loadNextBatch();
 }
 
@@ -81,6 +90,7 @@ function loadNextBatch() {
     const nextImages = images.slice(index, index + batchSize);
     nextImages.forEach(file => {
         const img = document.createElement('img');
+        img.loading = "lazy";
         img.src = 'images/' + file;
         gallery.appendChild(img);
     });
@@ -97,6 +107,8 @@ const observer = new IntersectionObserver(entries => {
     if (entries[0].isIntersecting) {
         loadNextBatch();
     }
+}, {
+    rootMargin: "300px"
 });
 
 observer.observe(document.getElementById('loading'));
@@ -106,4 +118,3 @@ loadImagesList();
 
 </body>
 </html>
-
