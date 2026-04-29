@@ -70,7 +70,7 @@ let index = 0;
 const batchSize = 10;
 
 async function loadImagesList() {
-    const response = await fetch('images/images.json');
+    const response = await fetch('images.json');
     images = await response.json();
     loadNextBatch();
 }
