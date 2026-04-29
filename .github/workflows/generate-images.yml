@@ -1,0 +1,27 @@
+name: Generate images.json
+
+on:
+  push:
+    paths:
+      - 'images/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Generate images.json
+        run: |
+          cd images
+          ls -1 *.jpg *.jpeg *.png *.webp 2>/dev/null | jq -R . | jq -s . > images.json
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add images/images.json
+          git commit -m "Auto-update images.json" || echo "No changes"
+          git push
