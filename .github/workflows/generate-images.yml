@@ -19,7 +19,7 @@ jobs:
       - name: Generate images.json
         run: |
           cd images
-          ls -1 *.jpg *.jpeg *.png *.webp *.gif 2>/dev/null | jq -R . | jq -s . > images.json
+          ls -1t *.jpg *.jpeg *.png *.webp *.gif 2>/dev/null | jq -R . | jq -s . > images.json
 
       - name: Commit changes
         run: |
