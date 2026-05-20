@@ -20,7 +20,9 @@ jobs:
         run: |
           cd images
           git ls-files *.jpg *.jpeg *.png *.webp *.gif \
-            | xargs -I{} git log -1 --format="%ct %f" -- {} \
+            | while read file; do
+                echo "$(git log -1 --format="%ct" -- "$file") $file";
+              done \
             | sort -nr \
             | awk '{print $2}' \
             | jq -R . | jq -s . > images.json
